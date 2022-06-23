@@ -1,6 +1,7 @@
 # adr-rabbitmq
 
 POC project to test rabbit-mq in cross service communications.
+
 Services can be distributed in multiple locations & technologies.
 
 ## Installation
@@ -22,4 +23,5 @@ The default Nest page should be available at ``http://localhost:3000/``
 
 ### RabbitMQ Environment
 The RabbitMQ should be available at ``http://localhost:15672``
+
 Use default user ```guest``` and password ``guest``
