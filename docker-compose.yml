@@ -1,0 +1,55 @@
+# For more information: https://laravel.com/docs/sail
+version: '3.8'
+services:
+    php-order:
+        build:
+            context: apps/php-order/vendor/laravel/sail/runtimes/8.1
+            dockerfile: Dockerfile
+            args:
+                WWWGROUP: '${WWWGROUP}'
+        image: sail-8.1/app
+        extra_hosts:
+            - 'host.docker.internal:host-gateway'
+        ports:
+            - '${APP_PORT:-80}:80'
+        environment:
+            WWWUSER: '${WWWUSER}'
+            LARAVEL_SAIL: 1
+        volumes:
+            - './apps/php-order:/var/www/html'
+        depends_on:
+            - rabbitmq
+        networks:
+            - adr
+
+    node-product:
+        build:
+            context: apps/node-product
+            dockerfile: Dockerfile
+            target: development
+        volumes:
+            - './apps/node-product:/usr/src/app'
+            - './usr/src/app/node_modules'
+        command: npm run start:dev
+        ports:
+            - '3000:3000'
+        depends_on:
+            - rabbitmq
+        networks:
+            - adr
+
+    rabbitmq:
+        image: rabbitmq:3-management-alpine
+        container_name: 'rabbitmq'
+        ports:
+            - '5672:5672'
+            - '15672:15672'
+        volumes:
+            - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+            - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+        networks:
+            - adr
+
+networks:
+    adr:
+        driver: bridge
