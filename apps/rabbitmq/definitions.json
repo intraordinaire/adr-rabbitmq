@@ -1,0 +1,71 @@
+{
+  "rabbit_version": "3.10.5",
+  "rabbitmq_version": "3.10.5",
+  "product_name": "RabbitMQ",
+  "product_version": "3.10.5",
+  "users": [
+    {
+      "name": "guest",
+      "password_hash": "+xkVVTbRyiQL4pg/741UjMIj5yR8pd04yyJbyAFU65+XrKNB",
+      "hashing_algorithm": "rabbit_password_hashing_sha256",
+      "tags": [
+        "administrator"
+      ],
+      "limits": {}
+    }
+  ],
+  "vhosts": [
+    {
+      "name": "/"
+    }
+  ],
+  "permissions": [
+    {
+      "user": "guest",
+      "vhost": "/",
+      "configure": ".*",
+      "write": ".*",
+      "read": ".*"
+    }
+  ],
+  "topic_permissions": [],
+  "parameters": [],
+  "global_parameters": [
+    {
+      "name": "internal_cluster_id",
+      "value": "rabbitmq-cluster-id-xVhJ5BJaFezvyZde_Vm7fQ"
+    }
+  ],
+  "policies": [],
+  "queues": [
+    {
+      "name": "php-orders",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "classic"
+      }
+    },
+    {
+      "name": "product-orders",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "stream"
+      }
+    },
+    {
+      "name": "node-products",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "classic"
+      }
+    }
+  ],
+  "exchanges": [],
+  "bindings": []
+}
