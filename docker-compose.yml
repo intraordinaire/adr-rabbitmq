@@ -1,9 +1,11 @@
 # For more information: https://laravel.com/docs/sail
 version: '3.8'
 services:
-    php-order:
+    order:
+        env_file:
+            - apps/order/.env
         build:
-            context: apps/php-order/vendor/laravel/sail/runtimes/8.1
+            context: apps/order/vendor/laravel/sail/runtimes/8.1
             dockerfile: Dockerfile
             args:
                 WWWGROUP: '${WWWGROUP}'
@@ -11,28 +13,35 @@ services:
         extra_hosts:
             - 'host.docker.internal:host-gateway'
         ports:
-            - '${APP_PORT:-80}:80'
+            - '${ORDER_PORT:-80}:80'
         environment:
             WWWUSER: '${WWWUSER}'
             LARAVEL_SAIL: 1
         volumes:
-            - './apps/php-order:/var/www/html'
+            - './apps/order:/var/www/html'
         depends_on:
             - rabbitmq
         networks:
             - adr
 
-    node-product:
+    product:
+        env_file:
+            - apps/product/.env
         build:
-            context: apps/node-product
+            context: apps/product/vendor/laravel/sail/runtimes/8.1
             dockerfile: Dockerfile
-            target: development
-        volumes:
-            - './apps/node-product:/usr/src/app'
-            - './apps/node-product/node_modules:/usr/src/app/node_modules'
-        command: npm run start:dev
+            args:
+                WWWGROUP: '${WWWGROUP}'
+        image: sail-8.1/app
+        extra_hosts:
+            - 'host.docker.internal:host-gateway'
         ports:
-            - '3000:3000'
+            - '${PRODUCT_PORT}:80'
+        environment:
+            WWWUSER: '${WWWUSER}'
+            LARAVEL_SAIL: 1
+        volumes:
+            - './apps/product:/var/www/html'
         depends_on:
             - rabbitmq
         networks:
